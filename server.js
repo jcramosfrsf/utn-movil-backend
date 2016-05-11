@@ -1,6 +1,7 @@
 var http = require("http");
 var url = require("url");
 var query = require("./responses");
+var notification = require("./notification");
 
 const PORT = 8888;
 var db;
@@ -20,7 +21,11 @@ function initServer(){
 }
 
 function serveClients(request, response){
-    var path = url.parse(request.url).pathname;
+
+    var url_parts = url.parse(request.url, true);
+    var path =  url_parts.pathname;
+
+    console.log(path);
 
     switch(path){
         case "/":
@@ -30,6 +35,16 @@ function serveClients(request, response){
             break;
         case "/news":
             query.getNews(db, response);
+            break;
+        case "/post":
+            var params = url_parts.query;
+            console.log(params.title);
+            console.log(params.topic);
+            console.log(params.body);
+            notification.send("/topics/"+params.topic, params.title, params.body);
+            response.writeHead(200, {"Content-Type": "text/html"});
+            response.write("Notification Sended!");
+            response.end();
             break;
         case "/socket.html":
         /*
