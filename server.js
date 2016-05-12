@@ -46,6 +46,12 @@ function serveClients(request, response){
             response.write("Notification Sended!");
             response.end();
             break;
+        case "/addNew":
+            var params = url_parts.query;
+            console.log(params);
+            var noticia = {title: params.title, contenido: params.contenido};
+            query.addNew(db,noticia,response);
+            break;
         case "/socket.html":
         /*
         fs.readFile(__dirname + path, function(error, data){
