@@ -2,6 +2,7 @@ var http = require("http");
 var url = require("url");
 var query = require("./responses");
 var notification = require("./notification");
+var querystring = require("querystring");
 
 const PORT = 8888;
 var db;
@@ -24,7 +25,6 @@ function serveClients(request, response){
 
     var url_parts = url.parse(request.url, true);
     var path =  url_parts.pathname;
-
     console.log(path);
 
     switch(path){
@@ -47,10 +47,13 @@ function serveClients(request, response){
             response.end();
             break;
         case "/addNew":
-            var params = url_parts.query;
-            console.log(params);
+            request.on('data', (data) => {
+            var params = querystring.parse(data.toString());
             var noticia = {title: params.title, contenido: params.contenido};
+            console.log(params.title);
+            console.log(params.contenido);
             query.addNew(db,noticia,response);
+            });
             break;
         case "/socket.html":
         /*
