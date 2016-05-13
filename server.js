@@ -3,7 +3,7 @@ var url = require("url");
 var query = require("./responses");
 var notification = require("./notification");
 var querystring = require("querystring");
-
+var fs = require("fs");
 const PORT = 8888;
 var db;
 
@@ -55,6 +55,20 @@ function serveClients(request, response){
             query.addNew(db,noticia,response);
             });
             break;
+        case "/form.html":
+            fs.readFile(__dirname + path, function(error, data){
+              if (error){
+                  response.writeHead(404);
+                  response.write("opps this doesn't exist - 404");
+                  response.end();
+              }
+              else{
+                  response.writeHead(200, {"Content-Type": "text/html"});
+                  response.write(data, "utf8");
+                  response.end();
+              }
+            });
+            break;
         case "/socket.html":
         /*
         fs.readFile(__dirname + path, function(error, data){
@@ -73,7 +87,7 @@ function serveClients(request, response){
         default:
             response.writeHead(404);
             response.write("opps this doesn't exist - 404");
-            response.end();
+            response.end();            
             break;
     }
 }
