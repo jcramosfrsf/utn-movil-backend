@@ -6,7 +6,7 @@ module.exports.send = function(topic, title, body, response){
     var message = gcm.Message();
     message.addNotification({
       title: title,
-      icon: 'ic_launcher',
+      icon: 'ic_stat_utn',
       body: body
     });
     sender.sendNoRetry(message, { topic: topic }, function (err, response) {
