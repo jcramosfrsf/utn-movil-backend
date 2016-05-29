@@ -33,9 +33,6 @@ function serveClients(request, response){
             response.write("Working...");
             response.end();
             break;
-        case "/news":
-            query.getNews(db, response);
-            break;
         case "/post":
             var params = url_parts.query;
             console.log(params.title);
@@ -46,16 +43,41 @@ function serveClients(request, response){
             response.write("Notification Sended!");
             response.end();
             break;
+        case "/channels":
+            query.getChannels(db, response);
+            break;
+        case "/addChannel":
+            request.on('data', (data) => {
+            var params = querystring.parse(data.toString());
+            var canal = {name: params.name, id: params.id, description: params.description};
+            query.addChannel(db,canal,response);
+            });
+            break;
+        case "/addChannel.html":
+            fs.readFile(__dirname + path, function(error, data){
+            if (error){
+               response.writeHead(404);
+               response.write("opps this doesn't exist - 404");
+               response.end();
+            }
+            else{
+               response.writeHead(200, {"Content-Type": "text/html"});
+               response.write(data, "utf8");
+               response.end();
+            }
+            });
+            break;
+        case "/news":
+            query.getNews(db, response);
+            break;
         case "/addNew":
             request.on('data', (data) => {
             var params = querystring.parse(data.toString());
-            var noticia = {title: params.title, contenido: params.contenido};
-            console.log(params.title);
-            console.log(params.contenido);
+            var noticia = {title: params.title, author: params.author, channel: params.channel, body: params.body, pubDate: params.pubDate, eventDate: params.eventDate, image: params.image};
             query.addNew(db,noticia,response);
             });
             break;
-        case "/form.html":
+        case "/addNew.html":
             fs.readFile(__dirname + path, function(error, data){
               if (error){
                   response.writeHead(404);
@@ -87,7 +109,7 @@ function serveClients(request, response){
         default:
             response.writeHead(404);
             response.write("opps this doesn't exist - 404");
-            response.end();            
+            response.end();
             break;
     }
 }
