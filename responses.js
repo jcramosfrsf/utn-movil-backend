@@ -17,13 +17,15 @@ module.exports.getNews = function(db, response){
 }
 
 module.exports.addNew = function(db, noticia,response){
-     db.collection('noticias').insertOne( {
-       "title": noticia.title,
-       "contenido": noticia.contenido
-     }, function(err, result) {
-      assert.equal(err, null);
-      response.writeHead(200, {"Content-Type": "text/html"});
-      response.write("Noticia Insertada!");
-      response.end();
+    db.collection('noticias').insertOne( {
+        "title": noticia.title,
+        "contenido": noticia.contenido
+    }, function(err, result) {
+        //assert.equal(err, null);
+        response.writeHead(200, {"Content-Type": "text/html"});
+        response.write("Noticia Insertada!");
+        response.end();
+        //TODO: Migrar a FireBase
+        //notification.send("/topics/"+params.topic, params.title, params.body);
     });
 }

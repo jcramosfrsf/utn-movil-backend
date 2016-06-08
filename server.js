@@ -1,93 +1,66 @@
-var http = require("http");
-var url = require("url");
+var PORT = 80;
+
+var express = require("express");
+var auth = require('http-auth');
+var basic = auth.basic({
+	realm: "Admin Area.",
+	file: __dirname + "/data/users.htpasswd"
+});
+var fs = require("fs");
+var bodyParser = require('body-parser');
 var query = require("./responses");
 var notification = require("./notification");
-var querystring = require("querystring");
-var fs = require("fs");
-const PORT = 8888;
 var db;
 
 var MongoClient = require("mongodb").MongoClient;
 var db = MongoClient.connect("mongodb://127.0.0.1:27017/local", function(err, database) {
-    if(err) throw err;
-    db = database;
-    console.log("Connected to the mongoDB!");
+    if(err){
+        //throw err;
+        console.log("Database connection failed.");
+    } else{
+        db = database;
+        console.log("Connected to Database!");
+    }
     initServer();
 });
 
 function initServer(){
-    var server = http.createServer(serveClients);
-    server.listen(PORT);
-    console.log("Server Started and listening in port="+PORT);
-}
+    var app = express();
 
-function serveClients(request, response){
+    app.use(bodyParser.json()); // to support JSON-encoded bodies
+    app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
+      extended: true
+    }));
 
-    var url_parts = url.parse(request.url, true);
-    var path =  url_parts.pathname;
-    console.log(path);
+    app.post('/addNew', auth.connect(basic), function(req, res){
+        //res.send("Hello from admin area - " + req.user + "!");
+        var params = req.body;
+        var noticia = {title: params.title, contenido: params.contenido};
+        console.log(params.title, params.contenido);
+        query.addNew(db, noticia, res);
+    });
 
-    switch(path){
-        case "/":
-            response.writeHead(200, {"Content-Type": "text/html"});
-            response.write("Working...");
-            response.end();
-            break;
-        case "/news":
-            query.getNews(db, response);
-            break;
-        case "/post":
-            var params = url_parts.query;
-            console.log(params.title);
-            console.log(params.topic);
-            console.log(params.body);
-            notification.send("/topics/"+params.topic, params.title, params.body);
-            response.writeHead(200, {"Content-Type": "text/html"});
-            response.write("Notification Sended!");
-            response.end();
-            break;
-        case "/addNew":
-            request.on('data', (data) => {
-            var params = querystring.parse(data.toString());
-            var noticia = {title: params.title, contenido: params.contenido};
-            console.log(params.title);
-            console.log(params.contenido);
-            query.addNew(db,noticia,response);
-            });
-            break;
-        case "/form.html":
-            fs.readFile(__dirname + path, function(error, data){
-              if (error){
-                  response.writeHead(404);
-                  response.write("opps this doesn't exist - 404");
-                  response.end();
-              }
-              else{
-                  response.writeHead(200, {"Content-Type": "text/html"});
-                  response.write(data, "utf8");
-                  response.end();
-              }
-            });
-            break;
-        case "/socket.html":
-        /*
-        fs.readFile(__dirname + path, function(error, data){
-            if (error){
-                response.writeHead(404);
-                response.write("opps this doesn"t exist - 404");
-                response.end();
-            }
-            else{
-                response.writeHead(200, {"Content-Type": "text/html"});
-                response.write(data, "utf8");
-                response.end();
-            }
-        });*/
-        break;
-        default:
-            response.writeHead(404);
-            response.write("opps this doesn't exist - 404");
-            response.end();            
-            break;
-    }
+    app.get('/', function(req, res){
+        res.send("Working...");
+    });
+
+    app.get('/news', function(req, res){
+        query.getNews(db, res);
+    });
+
+    app.get('/form.html', function(req, res){
+        fs.readFile(__dirname + '/form.html', function(error, data){
+          if (error){
+              res.send("opps this doesn't exist - 404");
+          }else{
+              res.writeHead(200, {"Content-Type": "text/html"});
+              res.write(data, "utf8");
+              res.end();
+          }
+        });
+    });
+
+    app.listen(PORT, function () {
+        console.log('Server running on port '+PORT);
+    });
 }

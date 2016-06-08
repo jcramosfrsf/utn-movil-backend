@@ -1,0 +1,30 @@
+{
+  "name": "utn-movil-backend",
+  "version": "1.0.0",
+  "description": "Backend for utn-movil app.",
+  "main": "server.js",
+  "dependencies": {
+    "assert": "^1.4.1",
+    "body-parser": "^1.15.1",
+    "express": "^4.13.4",
+    "fs": "^0.0.2",
+    "http-auth": "^2.3.9",
+    "mongodb": "^2.1.18",
+    "node-gcm": "^0.14.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "test",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tomasguti/utn-movil-backend.git"
+  },
+  "author": "tomasguti, spaciuk",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tomasguti/utn-movil-backend/issues"
+  },
+  "homepage": "https://github.com/tomasguti/utn-movil-backend#readme"
+}
