@@ -40,6 +40,14 @@ function initServer(){
         query.addNew(db, noticia, res);
     });
 
+    app.post('/addNew', auth.connect(basic), function(req, res){
+        //res.send("Hello from admin area - " + req.user + "!");
+        var params = req.body;
+        var noticia = {title: params.title, contenido: params.contenido};
+        console.log(params.title, params.contenido);
+        query.addNew(db, noticia, res);
+    });
+
     app.get('/', function(req, res){
         res.send("Working...");
     });
@@ -48,8 +56,20 @@ function initServer(){
         query.getNews(db, res);
     });
 
-    app.get('/form.html', function(req, res){
-        fs.readFile(__dirname + '/form.html', function(error, data){
+    app.get('/addNew.html', function(req, res){
+        fs.readFile(__dirname + '/addNew.html', function(error, data){
+          if (error){
+              res.send("opps this doesn't exist - 404");
+          }else{
+              res.writeHead(200, {"Content-Type": "text/html"});
+              res.write(data, "utf8");
+              res.end();
+          }
+        });
+    });
+
+    app.get('/addChannel.html', function(req, res){
+        fs.readFile(__dirname + '/addChannel.html', function(error, data){
           if (error){
               res.send("opps this doesn't exist - 404");
           }else{
