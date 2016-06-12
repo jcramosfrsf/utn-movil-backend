@@ -26,6 +26,7 @@ var db = MongoClient.connect("mongodb://127.0.0.1:27017/local", function(err, da
 
 function initServer(){
     var app = express();
+	var path = __dirname + "/public";
 
     app.use(bodyParser.json()); // to support JSON-encoded bodies
     app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
@@ -40,44 +41,10 @@ function initServer(){
         query.addNew(db, noticia, res);
     });
 
-    app.post('/addNew', auth.connect(basic), function(req, res){
-        //res.send("Hello from admin area - " + req.user + "!");
-        var params = req.body;
-        var noticia = {title: params.title, contenido: params.contenido};
-        console.log(params.title, params.contenido);
-        query.addNew(db, noticia, res);
-    });
-
-    app.get('/', function(req, res){
-        res.send("Working...");
-    });
+    app.use('/', express.static(path));
 
     app.get('/news', function(req, res){
         query.getNews(db, res);
-    });
-
-    app.get('/addNew.html', function(req, res){
-        fs.readFile(__dirname + '/addNew.html', function(error, data){
-          if (error){
-              res.send("opps this doesn't exist - 404");
-          }else{
-              res.writeHead(200, {"Content-Type": "text/html"});
-              res.write(data, "utf8");
-              res.end();
-          }
-        });
-    });
-
-    app.get('/addChannel.html', function(req, res){
-        fs.readFile(__dirname + '/addChannel.html', function(error, data){
-          if (error){
-              res.send("opps this doesn't exist - 404");
-          }else{
-              res.writeHead(200, {"Content-Type": "text/html"});
-              res.write(data, "utf8");
-              res.end();
-          }
-        });
     });
 
     app.listen(PORT, function () {
