@@ -26,7 +26,7 @@ var db = MongoClient.connect("mongodb://127.0.0.1:27017/local", function(err, da
 
 function initServer(){
     var app = express();
-	var path = __dirname + "/public";
+	  var path = __dirname + "/public";
 
     app.use(bodyParser.json()); // to support JSON-encoded bodies
     app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
@@ -34,12 +34,26 @@ function initServer(){
     }));
 
     app.post('/addNew', auth.connect(basic), function(req, res){
-        //res.send("Hello from admin area - " + req.user + "!");
         var params = req.body;
-        var noticia = {title: params.title, contenido: params.contenido};
-        console.log(params.title, params.contenido);
+        var noticia = {title: params.titulo, autor: params.autor, canal: params.canal, contenido: params.contenido, imagen: params.imagen};
+        console.log(params.titulo, params.autor, params.canal, params.contenido, params.imagen);
         query.addNew(db, noticia, res);
     });
+
+		app.post('/addEvent', auth.connect(basic), function(req, res){
+        var params = req.body;
+        var evento = {fecha: params.fecha, titulo: params.titulo, lugar: params.lugar};
+        console.log(params.fecha, params.titulo, params.lugar);
+        query.addEvent(db, evento, res);
+    });
+
+		app.post('/login', auth.connect(basic), function(req, res){
+				var params = req.body;
+        var cred = {usuario: params.inputUser, contraseña: params.inputPassword};
+        console.log(cred);
+				//si todo OK, devolvemos el form de noticia y evento :)
+				res.redirect("http://localhost/noticias.html");
+			});
 
     app.use('/', express.static(path));
 

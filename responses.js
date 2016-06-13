@@ -34,13 +34,11 @@ module.exports.getChannels = function(db, response){
 
 module.exports.addNew = function(db, noticia,response){
     db.collection("news").insertOne( {
-        "title": noticia.title,
-        "author": noticia.author,
-        "channel": noticia.channel,
-        "body": noticia.body,
-        "pubDate": noticia.pubDate,
-        "eventDate": noticia.eventDate,
-        "image": noticia.image
+        "titulo": noticia.titulo,
+        "autor": noticia.autor,
+        "canal": noticia.canal,
+        "contenido": noticia.contenido,
+        "imagen": noticia.imagen
     }, function(err, result) {
         assert.equal(err, null);
         response.writeHead(200, {"Content-Type": "text/html"});
@@ -48,6 +46,19 @@ module.exports.addNew = function(db, noticia,response){
         response.end();
         //TODO: Migrar a FireBase
         //notification.send("/topics/"+params.topic, params.title, params.body);
+    });
+}
+
+module.exports.addEvent = function(db, evento,response){
+    db.collection("events").insertOne( {
+        "fecha": evento.fecha,
+        "titulo": evento.titulo,
+        "lugar": evento.lugar
+    }, function(err, result) {
+        assert.equal(err, null);
+        response.writeHead(200, {"Content-Type": "text/html"});
+        response.write("Evento Insertado!");
+        response.end();
     });
 }
 
