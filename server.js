@@ -1,4 +1,4 @@
-var PORT = 80;
+var PORT = 3333;
 
 var express = require("express");
 var auth = require('http-auth');
