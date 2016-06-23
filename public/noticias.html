@@ -1,61 +1,80 @@
 <html>
 <head>
-<link rel="stylesheet" href="bootstrap.min.css">
-<script src="bootstrap.min.js"></script>
+  <link rel="stylesheet" href="bootstrap.min.css">
+  <script src="jquery-3.0.0.min.js"></script>
+  <script src="bootstrap.min.js"></script>
 </head>
 <body>
-  <div>
-  <div>
-  <nav class="navbar navbar-inverse" role="navigation" style="padding-left:130px;">
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
       <ul class="nav navbar-nav">
-          <li class="active"><a href="noticias.html">Noticias<span class="sr-only">(current)</span></a></li>
-          <li><a href="eventos.html">Eventos</a></li>
-      </ul>
-</nav>
-</div>
-  <br/>
-  <form action="http://admin:pass@localhost/addNew" method="post" class="form-horizontal" role="form" style="width: 50%;">
-    <div class="form-group">
-        <label for="titulo" class="col-sm-2 control-label">Titulo</label>
-        <div class="col-sm-10">
-            <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Titulo de la Noticia" value="">
+        <div class="navbar-header">
+          <a class="navbar-brand" style="text-align:center">UTN Móvil</a>
         </div>
+        <li class="active"><a href="noticias.html" style="text-align:center">Noticias<span class="sr-only">(current)</span></a></li>
+        <li><a href="eventos.html" style="text-align:center">Eventos</a></li>
+      </ul>
     </div>
-    <div class="form-group">
+  </nav>
+  <br/>
+  <div class="container">
+    <form action="/addNew" method="post" class="form-horizontal" role="form" style="width: 100%;">
+      <div class="form-group">
+        <label for="titulo" class="col-sm-2 control-label">Título</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="titulo" name="titulo" placeholder="T&iacute;tulo de la Noticia" value="" maxlength="80" required>
+        </div>
+      </div>
+      <div class="form-group">
         <label for="autor" class="col-sm-2 control-label">Autor</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="autor" name="autor" placeholder="Autor de la Noticia" value="">
+          <input type="text" class="form-control" id="autor" name="autor" placeholder="Autor de la Noticia" value="" maxlength="80" required>
         </div>
-    </div>
-    <div class="form-group">
+      </div>
+      <div class="form-group">
         <label for="canal" class="col-sm-2 control-label">Canal</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="canal" name="canal" placeholder="Canal de la Noticia" value="">
+          <SELECT name="canal" class="form-control" id="canal"></SELECT>
         </div>
-    </div>
-    <div class="form-group">
+      </div>
+      <div class="form-group">
         <label for="contenido" class="col-sm-2 control-label">Contenido</label>
         <div class="col-sm-10">
-            <textarea class="form-control" rows="4" name="contenido"></textarea>
+          <textarea class="form-control" rows="4" name="contenido" required></textarea>
         </div>
-    </div>
-    <div class="form-group">
+      </div>
+      <div class="form-group">
         <label for="imagen" class="col-sm-2 control-label">Imagen</label>
         <div class="col-sm-10">
-            <input type="url" class="form-control" id="url" name="url" placeholder="URL de la Imagen">
+          <input type="url" class="form-control" id="url" name="url" placeholder="URL de la Imagen" type="url">
         </div>
-    </div>
-    <div class="form-group">
+      </div>
+      <div class="form-group">
         <div class="col-sm-10 col-sm-offset-2">
-            <input id="submit" name="submit" type="submit" value="Send" class="btn btn-primary">
+          <input id="submit" name="submit" type="submit" value="Enviar" class="btn btn-primary">
         </div>
-    </div>
-    <div class="form-group">
+      </div>
+      <div class="form-group">
         <div class="col-sm-10 col-sm-offset-2">
-            <! Will be used to display an alert to the user>
+          <! Will be used to display an alert to the user>
         </div>
-    </div>
-</form>
+      </div>
+    </form>
   </div>
+  <script type="text/javascript">
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      var canal = document.getElementById('canal');
+      var data = JSON.parse(xhttp.response);
+      var size = data.length;
+      for(var i = 0; i < size; i++){
+        canal.options[i] = new Option(data[i].name, data[i]._id)
+      }
+    }
+  };
+  xhttp.open("GET", "/getChannels", true);
+  xhttp.send();
+  </script>
 </body>
 </html>

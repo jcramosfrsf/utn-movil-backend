@@ -1,49 +1,75 @@
 <html>
 <head>
-<link rel="stylesheet" href="bootstrap.min.css">
-<script src="bootstrap.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="bootstrap.min.css">
+  <script src="jquery-3.0.0.min.js"></script>
+  <script src="bootstrap.min.js"></script>
 </head>
 <body>
-  <div>
-  <div>
-  <nav class="navbar navbar-inverse" role="navigation" style="padding-left:130px;">
+  <nav class="navbar navbar-inverse" role="navigation">
+    <div class="container-fluid">
       <ul class="nav navbar-nav">
-          <li><a href="noticias.html">Noticias</a></li>
-          <li class="active"><a href="eventos.html">Eventos<span class="sr-only">(current)</span></a></li>
-      </ul>
-</nav>
-</div>
-  <br/>
-  <form action="http://admin:pass@localhost/addEvent" method="POST" class="form-horizontal" role="form" style="width: 50%;">
-    <div class="form-group">
-        <label for="titulo" class="col-sm-2 control-label">Titulo</label>
-        <div class="col-sm-10">
-            <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Titulo del Evento" value="">
+        <div class="navbar-header">
+          <a class="navbar-brand" style="text-align:center">UTN Móvil</a>
         </div>
+        <li><a href="noticias.html" style="text-align:center">Noticias</a></li>
+        <li class="active"><a href="eventos.html" style="text-align:center">Eventos<span class="sr-only">(current)</span></a></li>
+      </ul>
     </div>
-    <div class="form-group">
+  </nav>
+  <br/>
+  <div class="container">
+    <form action="/addEvent" method="POST" class="form-horizontal" role="form" style="width: 100%;">
+      <div class="form-group">
+        <label for="titulo" class="col-sm-2 control-label">Título</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="titulo" name="titulo" placeholder="T&iacute;tulo del Evento" value="" maxlength="80" required>
+        </div>
+      </div>
+      <div class="form-group">
         <label for="lugar" class="col-sm-2 control-label">Lugar</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="lugar" name="lugar" placeholder="Lugar del Evento" value="">
+          <input type="text" class="form-control" id="lugar" name="lugar" placeholder="Lugar del Evento" value="" maxlength="80" required>
         </div>
-    </div>
-    <div class="form-group">
+      </div>
+      <div class="form-group">
+        <label for="canal" class="col-sm-2 control-label">Canal</label>
+        <div class="col-sm-10">
+          <SELECT name="canal" class="form-control" id="canal"></SELECT>
+        </div>
+      </div>
+      <div class="form-group">
         <label for="fecha" class="col-sm-2 control-label">Fecha</label>
         <div class="col-sm-10">
-            <input type="datetime-local" class="form-control" id="fecha" name="fecha" placeholder="Fecha del Evento" value="">
+          <input type="datetime-local" class="form-control" id="fecha" name="fecha" placeholder="Fecha del Evento" value="" required>
         </div>
-    </div>
-    <div class="form-group">
+      </div>
+      <div class="form-group">
         <div class="col-sm-10 col-sm-offset-2">
-            <input id="submit" name="submit" type="submit" value="Send" class="btn btn-primary">
+          <input id="submit" name="submit" type="submit" value="Enviar" class="btn btn-primary">
         </div>
-    </div>
-    <div class="form-group">
+      </div>
+      <div class="form-group">
         <div class="col-sm-10 col-sm-offset-2">
-            <! Will be used to display an alert to the user>
+          <! Will be used to display an alert to the user>
         </div>
-    </div>
-</form>
+      </div>
+    </form>
   </div>
+  <script type="text/javascript">
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      var canal = document.getElementById('canal');
+      var data = JSON.parse(xhttp.response);
+      var size = data.length;
+      for(var i = 0; i < size; i++){
+        canal.options[i] = new Option(data[i].name, data[i]._id)
+      }
+    }
+  };
+  xhttp.open("GET", "/getChannels", true);
+  xhttp.send();
+  </script>
 </body>
 </html>
