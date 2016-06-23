@@ -6,6 +6,7 @@
   "dependencies": {
     "assert": "^1.4.1",
     "body-parser": "^1.15.1",
+    "date-utils": "^1.2.21",
     "express": "^4.13.4",
     "fs": "^0.0.2",
     "http-auth": "^2.3.9",
