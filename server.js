@@ -13,7 +13,7 @@ var notification = require("./notification");
 var db;
 
 var MongoClient = require("mongodb").MongoClient;
-var db = MongoClient.connect("mongodb://nodejs:password@localhost:27017?authSource=admin", function(err, database) {
+var db = MongoClient.connect("mongodb://nodejs:password@localhost:27017/app?authSource=admin", function(err, database) {
 	if(err){
 		//throw err;
 		console.log("Database connection failed.");
