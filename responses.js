@@ -3,7 +3,7 @@ require("date-utils");
 
 module.exports.getNews = function(db, response){
   var result = [];
-  var cursor = db.collection("news").find().limit(10);
+  var cursor = db.collection("noticias").find().limit(10);
   response.writeHead(200, {"Content-Type": "application/json"});
   cursor.each(function(err, doc) {
     assert.equal(err, null);
@@ -19,7 +19,7 @@ module.exports.getNews = function(db, response){
 
 module.exports.getNewsByChannels = function(db, canales, response){
   var result = [];
-  var cursor = db.collection("news").find( { canal: { $in: canales } } ).sortBy("fecha");
+  var cursor = db.collection("noticias").find( { canal: { $in: canales } } ).sortBy("fecha");
   response.writeHead(200, {"Content-Type": "application/json"});
   cursor.each(function(err, doc) {
     assert.equal(err, null);
@@ -35,7 +35,7 @@ module.exports.getNewsByChannels = function(db, canales, response){
 
 module.exports.getChannels = function(db, response){
   var result = [];
-  var cursor = db.collection("channels").find();
+  var cursor = db.collection("canales").find();
   response.writeHead(200, {"Content-Type": "application/json"});
   cursor.each(function(err, doc) {
     assert.equal(err, null);
