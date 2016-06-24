@@ -35,7 +35,7 @@ function initServer(){
 
 	app.post('/addNew', auth.connect(basic), function(req, res){
 		var params = req.body;
-		var noticia = {titulo: params.titulo, autor: params.autor, canal: params.canal, contenido: params.contenido, imagen: params.imagen};
+		var noticia = {titulo: params.titulo, autor: params.autor, canal: params.canal, cuerpo: params.cuerpo, imagen: params.imagen};
 		query.addNew(db, noticia, res);
 	});
 
@@ -62,7 +62,12 @@ function initServer(){
 	});
 
 	app.get('/getNews', function(req, res){
-		query.getNews(db, res);
+		var offset;
+		if(req.query != null && req.query.offset != null)
+			offset = parseInt(req.query.offset);
+		else
+			offset = 0;
+		query.getNews(db, offset, res);
 	});
 
 	app.get('/getChannels', function(req, res){

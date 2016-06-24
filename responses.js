@@ -1,9 +1,9 @@
 var assert = require("assert");
 require("date-utils");
 
-module.exports.getNews = function(db, response){
+module.exports.getNews = function(db, offset, response){
   var result = [];
-  var cursor = db.collection("noticias").find().limit(10);
+  var cursor = db.collection("noticias").find().skip(offset).limit(10);
   response.writeHead(200, {"Content-Type": "application/json"});
   cursor.each(function(err, doc) {
     assert.equal(err, null);
@@ -50,11 +50,11 @@ module.exports.getChannels = function(db, response){
 }
 
 module.exports.addNew = function(db, noticia,response){
-  db.collection("news").insertOne( {
+  db.collection("noticias").insertOne( {
     "titulo": noticia.titulo,
     "autor": noticia.autor,
     "canal": noticia.canal,
-    "contenido": noticia.contenido,
+    "cuerpo": noticia.cuerpo,
     "imagen": noticia.imagen,
     "fecha": Date().toString()
   }, function(err, result) {
