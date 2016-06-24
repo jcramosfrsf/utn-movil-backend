@@ -21,7 +21,7 @@
   <div class="container">
     <form action="/addEvent" method="POST" class="form-horizontal" role="form" style="width: 100%;">
       <div class="form-group">
-        <label for="titulo" class="col-sm-2 control-label">Título</label>
+        <label for="titulo" class="col-sm-2 control-label">T&iacute;tulo</label>
         <div class="col-sm-10">
           <input type="text" class="form-control" id="titulo" name="titulo" placeholder="T&iacute;tulo del Evento" value="" maxlength="80" required>
         </div>
@@ -64,7 +64,7 @@
       var data = JSON.parse(xhttp.response);
       var size = data.length;
       for(var i = 0; i < size; i++){
-        canal.options[i] = new Option(data[i].name, data[i]._id)
+        canal.options[i] = new Option(data[i].nombre, data[i]._id)
       }
     }
   };

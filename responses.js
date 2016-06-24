@@ -83,7 +83,7 @@ module.exports.addEvent = function(db, evento,response){
 module.exports.addChannel = function(db, canal,response){
   db.collection("channels").insertOne( {
     "id": canal.id,
-    "name": canal.name,
+    "name": canal.nombre,
     "description": canal.description
   }, function(err, result) {
     assert.equal(err, null);
