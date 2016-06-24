@@ -9,7 +9,7 @@
     <div class="container-fluid">
       <ul class="nav navbar-nav">
         <div class="navbar-header">
-          <a class="navbar-brand" style="text-align:center">UTN Móvil</a>
+          <a class="navbar-brand" style="text-align:center">UTN M&oacute;vil</a>
         </div>
         <li class="active"><a href="noticias.html" style="text-align:center">Noticias<span class="sr-only">(current)</span></a></li>
         <li><a href="eventos.html" style="text-align:center">Eventos</a></li>
@@ -69,7 +69,7 @@
       var data = JSON.parse(xhttp.response);
       var size = data.length;
       for(var i = 0; i < size; i++){
-        canal.options[i] = new Option(data[i].name, data[i]._id)
+        canal.options[i] = new Option(data[i].nombre, data[i]._id)
       }
     }
   };
