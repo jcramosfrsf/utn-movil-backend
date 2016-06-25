@@ -4,7 +4,8 @@ require("date-utils");
 module.exports.getNews = function(db, offset, response){
   var result = [];
   var cursor = db.collection("noticias").find().skip(offset).limit(10);
-  response.writeHead(200, {"Content-Type": "application/json"});
+  res.statusCode(200);
+  res.set({"content-type": "application/json; charset=utf-8"});
   repsonse.charset = "utf-8";
   cursor.each(function(err, doc) {
     assert.equal(err, null);
@@ -21,8 +22,9 @@ module.exports.getNews = function(db, offset, response){
 module.exports.getNewsByChannels = function(db, canales, response){
   var result = [];
   var cursor = db.collection("noticias").find( { canal: { $in: canales } } ).sortBy("fecha");
-  response.writeHead(200, {"Content-Type": "application/json"});
   repsonse.charset = "utf-8";
+  res.statusCode(200);
+  res.set({"content-type": "application/json; charset=utf-8"});
   cursor.each(function(err, doc) {
     assert.equal(err, null);
     if (doc != null) {
@@ -38,8 +40,8 @@ module.exports.getNewsByChannels = function(db, canales, response){
 module.exports.getChannels = function(db, response){
   var result = [];
   var cursor = db.collection("canales").find();
-  response.writeHead(200, {"Content-Type": "application/json"});
-  repsonse.charset = "utf-8";
+  res.statusCode(200);
+  res.set({"content-type": "application/json; charset=utf-8"});
   cursor.each(function(err, doc) {
     assert.equal(err, null);
     if (doc != null) {
