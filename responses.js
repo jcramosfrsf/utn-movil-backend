@@ -6,7 +6,6 @@ module.exports.getNews = function(db, offset, response){
   var cursor = db.collection("noticias").find().skip(offset).limit(10);
   response.status(200);
   response.set({"content-type": "application/json; charset=utf-8"});
-  repsonse.charset = "utf-8";
   cursor.each(function(err, doc) {
     assert.equal(err, null);
     if (doc != null) {
