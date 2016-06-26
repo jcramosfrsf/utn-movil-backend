@@ -74,9 +74,14 @@ function initServer(){
 		query.getChannels(db, res);
 	});
 
-	app.get('/getNewsByChannels',function(req,res){
+	app.post('/getNewsByChannels',function(req,res){
 		var params = req.body;
 		canales = params.canales;
+		query.getNewsByChannels(db, canales, res);
+	});
+
+	app.get('/queryPrueba',function(req,res){
+		canales =
 		query.getNewsByChannels(db, canales, res);
 	});
 
