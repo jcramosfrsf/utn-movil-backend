@@ -20,7 +20,7 @@ module.exports.getNews = function(db, offset, response){
 
 module.exports.getNewsByChannels = function(db, canales, response){
   var result = [];
-  var cursor = db.collection("noticias").find( { canal: { $in: canales } } ).sortBy("fecha");
+  var cursor = db.collection("noticias").find( { canal: { $in: canales } } );
   response.status(200);
   response.set({"content-type": "application/json; charset=utf-8"});
   cursor.each(function(err, doc) {
