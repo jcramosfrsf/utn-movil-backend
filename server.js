@@ -76,12 +76,12 @@ function initServer(){
 
 	app.post('/getNewsByChannels',function(req,res){
 		var params = req.body;
-		canales = params.canales;
+		canales = new JSON.parse(params.canales) ;
 		query.getNewsByChannels(db, canales, res);
 	});
 
 	app.get('/queryPrueba',function(req,res){
-		canales =
+		var canales = null;
 		query.getNewsByChannels(db, canales, res);
 	});
 
