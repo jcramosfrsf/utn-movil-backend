@@ -76,8 +76,12 @@ function initServer(){
 
 	app.post('/getNewsByChannels',function(req,res){
 		var params = req.body;
-		console.log(params);
-		query.getNewsByChannels(db, params.canales, res);
+		var offset;
+		if(req.query != null && req.query.offset != null)
+			offset = parseInt(req.query.offset);
+		else
+			offset = 0;
+		query.getNewsByChannels(db, params.canales, offset, res);
 	});
 
 	app.get('/queryPrueba',function(req,res){

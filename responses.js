@@ -18,9 +18,9 @@ module.exports.getNews = function(db, offset, response){
   });
 }
 
-module.exports.getNewsByChannels = function(db, canales, response){
+module.exports.getNewsByChannels = function(db, canales, offset, response){
   var result = [];
-  var cursor = db.collection("noticias").find( { canal: { $in: canales } } );
+  var cursor = db.collection("noticias").find( { canal: { $in: canales } } ).skip(offset).limit(10);
   response.status(200);
   response.set({"content-type": "application/json; charset=utf-8"});
   cursor.each(function(err, doc) {
