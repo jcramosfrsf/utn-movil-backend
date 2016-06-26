@@ -76,7 +76,7 @@ function initServer(){
 
 	app.post('/getNewsByChannels',function(req,res){
 		var params = req.body;
-		canales = new JSON.parse(params.canales) ;
+		canales = JSON.parse(params.canales) ;
 		query.getNewsByChannels(db, canales, res);
 	});
 
