@@ -103,7 +103,7 @@ function initServer(){
 		query.getNewsByChannels(db, params.canales, offset, res);
 	});
 
-	app.get('/getEvents', function(req, res){
+	app.post('/getEvents', function(req, res){
 		var params = req.body;
 		var mes;
 		var año;
