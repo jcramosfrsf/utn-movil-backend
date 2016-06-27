@@ -104,13 +104,22 @@ function initServer(){
 	});
 
 	app.get('/getEvents', function(req, res){
-		// var offset;
-		// if(req.query != null && req.query.offset != null){
-		// 	offset = parseInt(req.query.offset);
-		// }else{
-		// 	offset = 0;
-		// }
-		query.getEvents(db, offset, res);
+		var params = req.body;
+		var mes;
+		var año;
+		if(req.query != null && req.query.año != null){
+			año = parseInt(req.query.año)
+		}
+		else{
+			año = 0;
+		}
+		if(req.query != null && req.query.mes != null){
+			mes = parseInt(req.query.mes);
+		}
+		else{
+			mes = 0;
+		}
+		query.getEvents(db, params.canales, año, mes, res);
 	});
 
 	app.get('/queryPrueba',function(req,res){

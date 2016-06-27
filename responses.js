@@ -52,9 +52,18 @@ module.exports.getChannels = function(db, response){
   });
 }
 
-module.exports.getEvents = function(db, response){
+module.exports.getEvents = function(db, canales, año, mes, response){
   var result = [];
-  var cursor = db.collection("eventos").find();
+  mes = mes -1;// la notacion de Date requiere que el mes vaya de 0 a 11, entocnes restamos uno.
+  var fechaInf = new Date(año, mes);
+  var fechaSup;
+  if(mes == 11){
+    fechaSup = new Date(año + 1, 0);
+  }
+  else{
+    fechaSup = new Date(año, mes + 1);
+  }
+  var cursor = db.collection("eventos").find({"$and" :  [{"canal": { "$in": canales }}, {"fecha" : {"$gte" : fechaInf}}, {"fecha" : {"$lt" : fechaSup}}]});
   response.status(200);
   response.set({"content-type": "application/json; charset=utf-8"});
   cursor.each(function(err, doc) {
