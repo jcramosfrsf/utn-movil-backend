@@ -41,16 +41,19 @@ function initServer(){
 	app.post('/authenticate', function(req, res) {
 		var user = req.body.inputUser;
 		var pass = req.body.inputPassword;
-		if (!db.auth(user, pass)) {
-			res.status(401).send('Wrong user or password');
-			return;
-		}
-		var profile = {
-			user: user
-		};
-		var token = jwt.sign(profile, secret.API_KEY, { expiresIn : EXPIRATION_SECONDS });
-		res.cookie('token', token, { maxAge: EXPIRATION_SECONDS, httpOnly: true });
-		res.status(200).redirect('/noticias.html');
+		db.authenticate(user, pass, function(err, dbres){
+			if(err){
+				res.status(401).send('Wrong user or password');
+				return;
+			}
+			var profile = {
+				user: user
+			};
+			var token = jwt.sign(profile, secret.API_KEY, { expiresIn : EXPIRATION_SECONDS });
+			res.cookie('token', token, { maxAge: EXPIRATION_SECONDS, httpOnly: true });
+			res.status(200).redirect('/noticias.html');
+		})
+
 	});
 
 	app.post('/addNew', function(req, res){
@@ -115,12 +118,13 @@ function verifyToken(req, res, next){
 	var token = req.cookies.token;
 	if(token){
 		var decode = jwt.verify(token, secret.API_KEY);
-		if(db.auth(decode.user, decode.pass)){
-			//TODO: Checkear permisos.
+		db.authenticate(decode.user, decode.pass, function(err, dbres){
+			if(err){
+				res.status(401).send('Token expired or invalid permissions.');
+				return;
+			}
 			next();
-		}else{
-			res.status(401).redirect('Token expired or invalid permissions.');
-		}
+		});
 	}else{
 		res.status(401).redirect('/login');
 	}
