@@ -103,6 +103,16 @@ function initServer(){
 		query.getNewsByChannels(db, params.canales, offset, res);
 	});
 
+	app.get('/getEvents', function(req, res){
+		// var offset;
+		// if(req.query != null && req.query.offset != null){
+		// 	offset = parseInt(req.query.offset);
+		// }else{
+		// 	offset = 0;
+		// }
+		query.getEvents(db, offset, res);
+	});
+
 	app.get('/queryPrueba',function(req,res){
 		var canales = null;
 		query.getNewsByChannels(db, canales, res);

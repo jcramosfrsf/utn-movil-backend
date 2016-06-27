@@ -52,6 +52,23 @@ module.exports.getChannels = function(db, response){
   });
 }
 
+module.exports.getEvents = function(db, response){
+  var result = [];
+  var cursor = db.collection("eventos").find();
+  response.status(200);
+  response.set({"content-type": "application/json; charset=utf-8"});
+  cursor.each(function(err, doc) {
+    assert.equal(err, null);
+    if (doc != null) {
+      result.push(doc);
+    } else {
+      var string = JSON.stringify(result);
+      response.write(string);
+      response.end();
+    }
+  });
+}
+
 module.exports.addNew = function(db, noticia,response){
   db.collection("noticias").insertOne( {
     "titulo": noticia.titulo,
