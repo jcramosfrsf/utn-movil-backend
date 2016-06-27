@@ -47,7 +47,8 @@ function initServer(){
 				return;
 			}
 			var profile = {
-				user: user
+				user: user,
+				pass: pass
 			};
 			var token = jwt.sign(profile, secret.API_KEY, { expiresIn : EXPIRATION_SECONDS });
 			res.cookie('token', token, { maxAge: EXPIRATION_SECONDS, httpOnly: true });
