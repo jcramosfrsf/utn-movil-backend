@@ -1,15 +1,13 @@
 var PORT = 3000;
+var EXPIRATION_SECONDS = 60*60*24*10; //Ten Days
 
 var express = require("express");
-var auth = require('http-auth');
-var basic = auth.basic({
-	realm: "Admin Area.",
-	file: __dirname + "/data/users.htpasswd"
-});
-var fs = require("fs");
+var jwt = require('jsonwebtoken');
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 var query = require("./responses");
 var notification = require("./notification");
+var secret = require("./secret");
 var db;
 
 var MongoClient = require("mongodb").MongoClient;
@@ -32,41 +30,57 @@ function initServer(){
 	app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
 		extended: true
 	}));
+	app.use(cookieParser());
 
-	app.post('/addNew', auth.connect(basic), function(req, res){
+	//Protected Routes
+	app.use('/addNew', verifyToken);
+	app.use('/addEvent', verifyToken);
+	app.use('/noticias.html', verifyToken);
+	app.use('/eventos.html', verifyToken);
+
+	app.post('/authenticate', function(req, res) {
+		var user = req.body.inputUser;
+		var pass = req.body.inputPassword;
+		if (!db.auth(user, pass)) {
+			res.status(401).send('Wrong user or password');
+			return;
+		}
+		var profile = {
+			user: user
+		};
+		var token = jwt.sign(profile, secret.API_KEY, { expiresIn : EXPIRATION_SECONDS });
+		res.cookie('token', token, { maxAge: EXPIRATION_SECONDS, httpOnly: true });
+		res.status(200).redirect('/noticias.html');
+	});
+
+	app.post('/addNew', function(req, res){
 		var params = req.body;
 		var noticia = {titulo: params.titulo, autor: params.autor, canal: params.canal, cuerpo: params.cuerpo, imagen: params.imagen};
 		query.addNew(db, noticia, res);
 	});
 
-	app.post('/addEvent', auth.connect(basic), function(req, res){
+	app.post('/addEvent', function(req, res){
 		var params = req.body;
 		var evento = {titulo: params.titulo, lugar: params.lugar, canal: params.canal, fecha: params.fecha};
 		query.addEvent(db, evento, res);
 	});
 
-	app.post('/login', auth.connect(basic), function(req, res){
-		var params = req.body;
-		var cred = {usuario: params.inputUser, contraseña: params.inputPassword};
-		console.log(cred);
-		//si todo OK, devolvemos el form de noticia y evento :)
-		fs.readFile(path + "/noticias.html", function(err,data){
-			if(err){throw err;}
-			res.writeHead(200,{
-				"Content-Type" : "text/html",
-				"Content-length" : data.length
-			});
-			res.write(data);
-			res.end();
-		});
+	app.get('/', function(req, res){
+		res.redirect('login.html');
+	});
+
+	app.get('/logout',function(req,res){
+		res.clearCookie("token");
+		res.redirect('login.html');
 	});
 
 	app.get('/getNews', function(req, res){
 		var offset;
-		if(req.query != null && req.query.offset != null)
+		if(req.query != null && req.query.offset != null){
 			offset = parseInt(req.query.offset);
-		else
+		}else{
 			offset = 0;
+		}
 		query.getNews(db, offset, res);
 	});
 
@@ -77,10 +91,11 @@ function initServer(){
 	app.post('/getNewsByChannels',function(req,res){
 		var params = req.body;
 		var offset;
-		if(req.query != null && req.query.offset != null)
+		if(req.query != null && req.query.offset != null){
 			offset = parseInt(req.query.offset);
-		else
+		}else{
 			offset = 0;
+		}
 		query.getNewsByChannels(db, params.canales, offset, res);
 	});
 
@@ -94,4 +109,19 @@ function initServer(){
 	app.listen(PORT, function () {
 		console.log('Server running on port '+PORT);
 	});
+}
+
+function verifyToken(req, res, next){
+	var token = req.cookies.token;
+	if(token){
+		var decode = jwt.verify(token, secret.API_KEY);
+		if(db.auth(decode.user, decode.pass)){
+			//TODO: Checkear permisos.
+			next();
+		}else{
+			res.status(401).redirect('Token expired or invalid permissions.');
+		}
+	}else{
+		res.status(401).redirect('/login');
+	}
 }

@@ -65,8 +65,7 @@ module.exports.addNew = function(db, noticia,response){
     response.writeHead(200, {"Content-Type": "text/html"});
     response.write("Noticia Insertada!");
     response.end();
-    //TODO: Migrar a FireBase
-    //notification.send("/topics/"+params.topic, params.title, params.body);
+    notification.send(noticia.canal, params.titulo, params.cuerpo);
   });
 }
 

@@ -15,17 +15,12 @@
 </head>
 <body>
   <div class="container">
-    <form action="/login" method="POST" class="form-signin">
+    <form action="/authenticate" method="POST" class="form-signin">
       <h2 class="form-signin-heading">Credenciales</h2>
       <label for="inputUser" class="sr-only">Usuario</label>
       <input type="user" id="inputUser" name="inputUser" class="form-control" placeholder="Usuario" required autofocus>
       <label for="inputPassword" class="sr-only">Contraseña</label>
       <input type="password" id="inputPassword" name="inputPassword" class="form-control" placeholder="Contraseña" required>
-      <div class="checkbox">
-        <label>
-          <input type="checkbox" value="remember-me"> Recordarme
-        </label>
-      </div>
       <button class="btn btn-lg btn-primary btn-block" value="submit" type="submit">Iniciar sesión</button>
     </form>
   </div> <!-- /container -->
