@@ -1,4 +1,5 @@
 var assert = require("assert");
+var notification = require("./notification");
 require("date-utils");
 
 module.exports.getNews = function(db, offset, response){
