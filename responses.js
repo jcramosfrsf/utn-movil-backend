@@ -92,7 +92,7 @@ module.exports.addNew = function(db, noticia,response){
     response.writeHead(200, {"Content-Type": "text/html"});
     response.write("Noticia Insertada!");
     response.end();
-    notification.send(noticia.canal, params.titulo, params.cuerpo);
+    notification.send(noticia.canal, noticia.titulo, noticia.cuerpo);
   });
 }
 
