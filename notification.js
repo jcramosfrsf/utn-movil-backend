@@ -5,7 +5,7 @@ var maxChars = 140;
 module.exports.send = function(topic, title, body, response){
     var fcm = new FCM(secret.API_KEY);
 
-    var bodyString = params.body;
+    var bodyString = body;
     if(bodyString.length > maxChars){
         bodyString = bodyString.substr(0, maxChars)+"...";
     }
