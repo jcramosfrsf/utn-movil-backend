@@ -58,15 +58,11 @@ function initServer(){
 	});
 
 	app.post('/addNew', function(req, res){
-		var params = req.body;
-		var noticia = {titulo: params.titulo, autor: params.autor, canal: params.canal, cuerpo: params.cuerpo, imagen: params.imagen};
-		query.addNew(db, noticia, res);
+		query.addNew(db, req, res);
 	});
 
 	app.post('/addEvent', function(req, res){
-		var params = req.body;
-		var evento = {titulo: params.titulo, lugar: params.lugar, canal: params.canal, fecha: params.fecha};
-		query.addEvent(db, evento, res);
+		query.addEvent(db, req, res);
 	});
 
 	app.get('/', function(req, res){
@@ -79,52 +75,19 @@ function initServer(){
 	});
 
 	app.get('/getNews', function(req, res){
-		var offset;
-		if(req.query != null && req.query.offset != null){
-			offset = parseInt(req.query.offset);
-		}else{
-			offset = 0;
-		}
-		query.getNews(db, offset, res);
+		query.getNews(db, req, res);
 	});
 
 	app.get('/getChannels', function(req, res){
 		query.getChannels(db, res);
 	});
 
-	app.post('/getNewsByChannels',function(req,res){
-		var params = req.body;
-		var offset;
-		if(req.query != null && req.query.offset != null){
-			offset = parseInt(req.query.offset);
-		}else{
-			offset = 0;
-		}
-		query.getNewsByChannels(db, params.canales, offset, res);
-	});
-
 	app.post('/getEvents', function(req, res){
-		var params = req.body;
-		var mes;
-		var año;
-		if(req.query != null && req.query.año != null){
-			año = parseInt(req.query.año)
-		}
-		else{
-			año = 0;
-		}
-		if(req.query != null && req.query.mes != null){
-			mes = parseInt(req.query.mes);
-		}
-		else{
-			mes = 0;
-		}
-		query.getEvents(db, params.canales, año, mes, res);
+		query.getEvents(db, req, res);
 	});
 
 	app.get('/queryPrueba',function(req,res){
-		var canales = null;
-		query.getNewsByChannels(db, canales, res);
+		query.getEvents(db, null, 1999, 1, res);
 	});
 
 	app.use('/', express.static(path));
