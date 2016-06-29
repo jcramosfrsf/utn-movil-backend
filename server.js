@@ -11,7 +11,7 @@ var secret = require("./secret");
 var db;
 
 var MongoClient = require("mongodb").MongoClient;
-var db = MongoClient.connect("mongodb://nodejs:password@localhost:27017/app?authSource=admin", function(err, database) {
+var db = MongoClient.connect("mongodb://nodejs:password@localhost:27017/app?authSource=admin", function(err, database){
 	if(err){
 		//throw err;
 		console.log("Database connection failed.");
@@ -38,7 +38,7 @@ function initServer(){
 	app.use('/noticias.html', verifyToken);
 	app.use('/eventos.html', verifyToken);
 
-	app.post('/authenticate', function(req, res) {
+	app.post('/authenticate', function(req, res){
 		var user = req.body.inputUser;
 		var pass = req.body.inputPassword;
 		db.authenticate(user, pass, function(err, dbres){
@@ -54,7 +54,17 @@ function initServer(){
 			res.cookie('token', token, { maxAge: EXPIRATION_SECONDS, httpOnly: true });
 			res.status(200).redirect('/noticias.html');
 		})
+	});
 
+	app.use('/', express.static(path));
+
+	app.get('/', function(req, res){
+		res.redirect('login.html');
+	});
+
+	app.get('/logout',function(req, res){
+		res.clearCookie("token");
+		res.redirect('login.html');
 	});
 
 	app.post('/addNew', function(req, res){
@@ -63,15 +73,6 @@ function initServer(){
 
 	app.post('/addEvent', function(req, res){
 		query.addEvent(db, req, res);
-	});
-
-	app.get('/', function(req, res){
-		res.redirect('login.html');
-	});
-
-	app.get('/logout',function(req,res){
-		res.clearCookie("token");
-		res.redirect('login.html');
 	});
 
 	app.get('/getNews', function(req, res){
@@ -86,14 +87,12 @@ function initServer(){
 		query.getEvents(db, req, res);
 	});
 
-	app.get('/queryPrueba',function(req,res){
+	app.get('/queryPrueba',function(req, res){
 		query.getEvents(db, null, 1999, 1, res);
 	});
 
-	app.use('/', express.static(path));
-
-	app.listen(PORT, function () {
-		console.log('Server running on port '+PORT);
+	app.listen(PORT, function(){
+		console.log('Server running on port '+ PORT);
 	});
 }
 
