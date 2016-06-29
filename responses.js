@@ -106,7 +106,7 @@ function validarNoticia(request, success, noticia){
   if(request.body != null){
     var params = request.body;
     if(params.titulo != null && params.autor != null && params.canal != null && params.cuerpo != null){
-      noticia = {titulo: params.titulo, autor: params.autor, canal: params.canal, cuerpo: params.cuerpo, fecha: "fecha": Date().toString() };
+      noticia = {titulo: params.titulo, autor: params.autor, canal: params.canal, cuerpo: params.cuerpo, fecha: Date().toString() };
       success = true;
     }
     else{
