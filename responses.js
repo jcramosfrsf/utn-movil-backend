@@ -95,7 +95,7 @@ module.exports.addNew = function(db, request, response){
       }, function(err, result) {
         assert.equal(err, null);
         response.send("Noticia Insertada!");
-        notification.send(noticia.canal, noticia.titulo, noticia.cuerpo);
+        notification.send(params.canal, params.titulo, params.cuerpo);
       });
     }
     else{
@@ -110,7 +110,7 @@ module.exports.addNew = function(db, request, response){
 module.exports.addEvent = function(db, request, response){
   if(request.body != null){
     var params = request.body;
-    if(params.fecha != null && params.titulo != null && params.lugar){
+    if(params.fecha != null && params.titulo != null && params.lugar != null){
       db.collection("events").insertOne( {
         "fecha": params.fecha,
         "titulo": params.titulo,
