@@ -112,9 +112,9 @@ module.exports.addEvent = function(db, request, response){
     var params = request.body;
     if(params.fecha != null && params.titulo != null && params.lugar){
       db.collection("events").insertOne( {
-        "fecha": evento.fecha,
-        "titulo": evento.titulo,
-        "lugar": evento.lugar
+        "fecha": params.fecha,
+        "titulo": params.titulo,
+        "lugar": params.lugar
       }, function(err, result) {
         assert.equal(err, null);
         response.send("Evento Insertado!");
