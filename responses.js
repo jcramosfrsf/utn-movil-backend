@@ -13,7 +13,7 @@ module.exports.getNews = function(db, request, response){
         offset = 0;
       }
       var result = [];
-      var cursor = db.collection("noticias").find( { canal: { $in: params.canales } } ).skip(offset).limit(10);
+      var cursor = db.collection("noticias").find( { canal: { $in: params.channels } } ).skip(offset).limit(10);
       cursor.each(function(err, doc) {
         assert.equal(err, null);
         if (doc != null) {
@@ -62,7 +62,7 @@ module.exports.getEvents = function(db, request, response){
       else{
         dateMax = new Date(year, month + 1);
       }
-      var cursor = db.collection("eventos").find({"$and" :  [{"canal": { "$in": params.canales }}, {"fecha" : {"$gte" : dateMin}}, {"fecha" : {"$lt" : dateMax}}]});
+      var cursor = db.collection("eventos").find({"$and" :  [{"canal": { "$in": params.channels }}, {"fecha" : {"$gte" : dateMin}}, {"fecha" : {"$lt" : dateMax}}]});
       cursor.each(function(err, doc) {
         assert.equal(err, null);
         if (doc != null) {
