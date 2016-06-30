@@ -50,6 +50,7 @@ module.exports.getEvents = function(db, request, response){
     success = callback.success;
     if(success){
       parametros = callback.parametros;
+      var result = [];
       var cursor = db.collection("eventos").find({"$and" :  [{"canal": { "$in": parametros.canales }}, {"fecha" : {"$gte" : parametros.dateMin}}, {"fecha" : {"$lt" : parametros.dateMax}}]});
       cursor.each(function(err, doc) {
         assert.equal(err, null);
