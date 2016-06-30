@@ -88,7 +88,8 @@ function initServer(){
 	});
 
 	app.get('/queryPrueba',function(req, res){
-		query.getEvents(db, null, 1999, 1, res);
+		//query.getEvents(db, null, 1999, 1, res);
+		query.queryPrueba();
 	});
 
 	app.listen(PORT, function(){
