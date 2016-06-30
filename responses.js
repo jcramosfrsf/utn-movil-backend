@@ -128,11 +128,7 @@ function validarNoticia(request, callback){
   if(request.body != null){
     var params = request.body;
     if(params.titulo != null && params.autor != null && params.canal != null && params.cuerpo != null){
-<<<<<<< HEAD
       noticia = {titulo: params.titulo, autor: params.autor, canal: params.canal, cuerpo: params.cuerpo, imagen: params.url, fecha: Date().toString() };
-=======
-      noticia = {titulo: params.titulo, autor: params.autor, canal: params.canal, cuerpo: params.cuerpo, fecha: Date().toString() };
->>>>>>> origin/master
       success = true;
     }
     else{
