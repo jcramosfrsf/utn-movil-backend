@@ -200,7 +200,7 @@ function validarParametrosGetEvents(request, callback){
       month = month -1;// la notacion de Date requiere que el mes vaya de 0 a 11, entocnes restamos uno.
       var dateMin = new Date(year, month);
       var dateMax;
-      if(mes == 11){
+      if(month == 11){
         dateMax = new Date(year + 1, 0);
       }
       else{
