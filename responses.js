@@ -20,7 +20,8 @@ module.exports.getNews = function(db, request, response){
         if (doc != null) {
           result.push(doc);
         } else {
-          response.status(200).json(result);
+          response.set({"content-type": "application/json; charset=utf-8"});
+          response.status(200).send(result);
         }
       });
     }
@@ -38,7 +39,8 @@ module.exports.getChannels = function(db, response){
     if (doc != null) {
       result.push(doc);
     } else {
-      response.status(200).json(result);
+        response.set({"content-type": "application/json; charset=utf-8"});
+        response.status(200).send(result);
     }
   });
 }
@@ -57,7 +59,8 @@ module.exports.getEvents = function(db, request, response){
         if (doc != null) {
           result.push(doc);
         }else{
-          response.status(200).json(result);
+            response.set({"content-type": "application/json; charset=utf-8"});
+            response.status(200).send(result);
         }
       });
     }
