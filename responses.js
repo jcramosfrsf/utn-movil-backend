@@ -146,10 +146,12 @@ function validarEvento(request, callback){
   var result;
   var evento;
   var success;
+
   if(request.body != null){
     var params = request.body;
     if(params.titulo != null && params.lugar != null && params.canal != null && params.fecha != null){
-      evento = {titulo: params.titulo, lugar: params.lugar, canal: params.canal, fecha: Date(params.fecha) };
+      var date = new Date(params.fecha);
+      evento = {titulo: params.titulo, lugar: params.lugar, canal: params.canal, fecha: date.toString() };
       success = true;
     }
     else{
