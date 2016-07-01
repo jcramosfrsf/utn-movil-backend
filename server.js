@@ -75,21 +75,16 @@ function initServer(){
 		query.addEvent(db, req, res);
 	});
 
-	app.get('/getNews', function(req, res){
-		query.getNews(db, req, res);
-	});
-
 	app.get('/getChannels', function(req, res){
 		query.getChannels(db, res);
 	});
 
-	app.post('/getEvents', function(req, res){
-		query.getEvents(db, req, res);
+	app.post('/getNews', function(req, res){
+		query.getNews(db, req, res);
 	});
 
-	app.get('/queryPrueba',function(req, res){
-		//query.getEvents(db, null, 1999, 1, res);
-		query.queryPrueba();
+	app.post('/getEvents', function(req, res){
+		query.getEvents(db, req, res);
 	});
 
 	app.listen(PORT, function(){
@@ -109,6 +104,6 @@ function verifyToken(req, res, next){
 			next();
 		});
 	}else{
-		res.status(401).redirect('/login');
+		res.status(401).redirect('/login.html');
 	}
 }
