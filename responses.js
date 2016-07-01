@@ -11,7 +11,7 @@ module.exports.getNews = function(db, request, response){
         if(request.query != null && request.query.offset != null){
             offset = request.query.offset;
         }
-        if(canales != null){
+        if(channels != null){
             var result = [];
             var cursor = db.collection("noticias").find( { canal: { $in: channels } } ).skip(offset).limit(10);
                 cursor.each(function(err, doc) {
@@ -47,7 +47,7 @@ module.exports.getEvents = function(db, request, response){
         var month = request.query.month;
         var year = request.query.year;
         //channels = ["institucional", "sistemas", "be"]; //Canales Hardcodeados para el GET.
-        if(canales != null && month != null && year != null){
+        if(channels != null && month != null && year != null){
             var start = new Date(year, month);
             month++;
             var end = new Date(year, month);
