@@ -71,6 +71,7 @@ module.exports.addNew = function(db, request, response){
             db.collection("canales").findOne({ _id: params.canal }, function(err, canal){
                 if(err == null && canal != null){
                     currentDate = new Date();
+                    currentDate.setHours(currentDate.getHours()-3); //TimeZone Offset
                     noticia = {titulo: params.titulo, autor: canal.nombre, canal: params.canal, cuerpo: params.cuerpo, imagen: params.url, fecha: currentDate };
                     db.collection("noticias").insertOne(noticia, function(err, result) {
                         assert.equal(err, null);
