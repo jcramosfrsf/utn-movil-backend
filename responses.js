@@ -19,6 +19,7 @@ module.exports.getNews = function(db, request, response){
         if (doc != null) {
           result.push(doc);
         } else {
+          response.status(200).send(result);
         }
       });
     }
