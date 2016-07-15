@@ -68,7 +68,7 @@ module.exports.addNew = function(db, request, response){
   if(request.body != null){
     var params = request.body;
     if(params.titulo != null && params.canal != null && params.cuerpo != null){
-      db.collection("canales").findOne({ "_id": parseInt(params.canal) }, function(err, canal){
+      db.collection("canales").findOne({ "_id": params.canal }, function(err, canal){
         if(err == null && canal != null){
           currentDate = new Date();
           currentDate.setHours(currentDate.getHours()-3); //TimeZone Offset
