@@ -77,7 +77,7 @@ module.exports.addNew = function(db, request, response){
             assert.equal(err, null);
             if(err == null){
               response.send("Noticia Insertada!");
-              notification.send(noticia.canal, noticia.titulo, noticia.cuerpo);
+              notification.send(noticia.canal, canal.nombre, noticia.titulo);
             }else{
               console.log(err);
             }
