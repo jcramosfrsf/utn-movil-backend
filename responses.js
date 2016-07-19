@@ -77,7 +77,7 @@ module.exports.addNew = function(db, request, response){
             assert.equal(err, null);
             if(err == null){
               response.send("Noticia Insertada!");
-              notification.send(noticia.canal, canal.nombre, noticia.titulo);
+              notification.send("noticias", noticia.canal, canal.nombre, noticia.titulo);
             }else{
               console.log(err);
             }
@@ -98,7 +98,7 @@ module.exports.addEvent = function(db, request, response){
         assert.equal(err, null);
         if(err == null){
           response.send("Evento Insertado!");
-          notification.send(evento.canal, evento.titulo, evento.lugar);
+          notification.send("eventos", evento.canal, evento.titulo, evento.lugar);
         }else{
           console.log(err);
         }

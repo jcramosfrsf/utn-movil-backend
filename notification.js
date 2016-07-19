@@ -1,21 +1,17 @@
 var FCM = require("fcm-node");
 var secret = require("./secret");
-var maxChars = 140;
 
-module.exports.send = function(topic, title, body, response){
+module.exports.send = function(tag, topic, title, body, response){
     var fcm = new FCM(secret.API_KEY);
-
-    var bodyString = body;
-    if(bodyString.length > maxChars){
-        bodyString = bodyString.substr(0, maxChars)+"...";
-    }
 
     var message = {
         to: "/topics/"+topic,
+        priority: "high",
         notification: {
             title: title,
-            body: bodyString,
-            icon: 'ic_stat_utn'
+            body: body,
+            icon: 'ic_stat_utn',
+            tag: tag
         }
     };
 
