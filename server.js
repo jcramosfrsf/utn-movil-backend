@@ -1,5 +1,5 @@
 var HTTP_PORT = 3000;
-var HTTPS_PORT = 443;
+var HTTPS_PORT = 3443;
 var EXPIRATION_SECONDS = 1000*60*60*24*10; //Ten Days
 
 var http = require("http");
