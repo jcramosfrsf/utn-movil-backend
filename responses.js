@@ -6,14 +6,14 @@ module.exports.getNews = function(db, request, response){
   if(request.body != null){
     var params = request.body;
     var channels = params.channels;
-    //channels = ["institucional", "sistemas", "be"]; //Canales Hardcodeados para el GET.
+    //channels = ["institucional", "sistemas", "be", "testing"]; //Canales Hardcodeados para el GET.
     var offset = 0;
     if(request.query != null && request.query.offset != null){
       offset = parseInt(request.query.offset);
     }
     if(channels != null){
       var result = [];
-      var cursor = db.collection("noticias").find( { canal: { $in: channels } } ).skip(offset).limit(10);
+      var cursor = db.collection("noticias").find( { canal: { $in: channels } } ).sort({fecha: -1}).skip(offset).limit(10);
       cursor.each(function(err, doc) {
         assert.equal(err, null);
         if (doc != null) {
