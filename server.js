@@ -79,6 +79,7 @@ function initWebServer(){
 	web.use('/addEvent', verifyToken);
 	web.use('/noticias.html', verifyToken);
 	web.use('/eventos.html', verifyToken);
+	web.use('/exito.html', verifyToken);
 
 	web.post('/authenticate', function(req, res){
 		var user = req.body.inputUser;
@@ -101,7 +102,7 @@ function initWebServer(){
 	web.use('/', express.static(path));
 
 	web.get('/', function(req, res){
-		res.redirect('login.html');
+		res.redirect('noticias.html');
 	});
 
 	web.get('/logout',function(req, res){
