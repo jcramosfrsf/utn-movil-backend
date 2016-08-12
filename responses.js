@@ -77,7 +77,9 @@ module.exports.addNew = function(db, request, response){
                         assert.equal(err, null);
                         if(err == null){
                             response.status(200).redirect("/exito.html");
-                            notification.send("noticias", noticia.canal, canal.nombre, noticia.titulo);
+                            if(params.notification == "send"){
+                                notification.send("noticias", noticia.canal, canal.nombre, noticia.titulo);
+                            }
                         }else{
                             console.log(err);
                         }
@@ -98,53 +100,11 @@ module.exports.addEvent = function(db, request, response){
                 assert.equal(err, null);
                 if(err == null){
                     response.status(200).redirect("/exito.html");
-                    notification.send("eventos", evento.canal, evento.titulo, evento.lugar);
+                    if(params.notification == "send"){
+                        notification.send("eventos", evento.canal, evento.titulo, evento.lugar);
+                    }
                 }else{
                     console.log(err);
-                }
-            });
-        }
-    }
-}
-
-module.exports.addMessage = function(db, request, response){
-    if(request.body != null){
-        var params = request.body;
-        if(params.codigo != null && params.autor != null && params.mensaje != null){
-            currentDate = new Date();
-            currentDate.setHours(currentDate.getHours()-3); //TimeZone Offset
-            mensaje = {codigo: params.codigo, autor: params.autor, mensaje: params.mensaje, fecha: currentDate };
-            db.collection("mensajes").insertOne(mensaje, function(err, result) {
-                assert.equal(err, null);
-                if(err == null){
-                    response.status(200).send("Mensaje Enviado!");
-                    notification.send("mensajes", comision._id, params.autor, params.mensaje);
-                }else{
-                    console.log(err);
-                }
-            });
-        }
-    }
-}
-
-module.exports.getMessages = function(db, request, response){
-    if(request.body != null){
-        var params = request.body;
-        var codigo = params.codigo;
-        //codigo = "88-65-63";
-        var offset = 0;
-        if(request.query != null && request.query.offset != null){
-            offset = parseInt(request.query.offset);
-        }
-        if(codigo != null){
-            var result = [];
-            var cursor = db.collection("mensajes").find( { codigo: codigo } ).sort( { fecha: -1 } ).skip(offset).limit(10);
-            cursor.each(function(err, doc) {
-                assert.equal(err, null);
-                if (doc != null) {
-                    result.push(doc);
-                } else {
-                    response.status(200).send(result);
                 }
             });
         }
