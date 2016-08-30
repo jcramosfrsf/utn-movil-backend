@@ -1,107 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE-edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="bootstrap.min.css">
-  <script src="jquery-3.0.0.min.js"></script>
-  <script src="bootstrap.min.js"></script>
-  <link rel="stylesheet" href="bootstrap3-wysihtml5.min.css">
-  <script src="bootstrap3-wysihtml5.all.min.js"></script>
-  <script src="bootstrap-wysihtml5.es-AR.js"></script>
-  <title>UTN Móvil - Noticias</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <script src="jquery-3.0.0.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+    <link rel="stylesheet" href="bootstrap3-wysihtml5.min.css">
+    <script src="bootstrap3-wysihtml5.all.min.js"></script>
+    <script src="bootstrap-wysihtml5.es-AR.js"></script>
+    <title>UTN Móvil - Noticias</title>
 </head>
 <body>
-  <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#links-navbar-collapse" aria-expanded="false">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="#">UTN Móvil</a>
-      </div>
-      <div class="collapse navbar-collapse" id="links-navbar-collapse">
-        <ul class="nav navbar-nav">
-          <li class="active"><a href="noticias.html" style="text-align:center">Noticias<span class="sr-only">(current)</span></a></li>
-          <li><a href="eventos.html" style="text-align:center">Eventos</a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="/logout" style="text-align:center">Salir</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-  <div class="container-fluid">
-    <form action="/addNew" method="post" class="form-horizontal" role="form" style="width: 100%;">
-      <div class="form-group">
-        <label for="canal" class="col-sm-2 control-label">Canal</label>
-        <div class="col-sm-10">
-          <select name="canal" class="form-control" id="canal"></select>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="titulo" class="col-sm-2 control-label">Título</label>
-        <div class="col-sm-10">
-          <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Título de la Noticia" value="" maxlength="80" required>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="cuerpo" class="col-sm-2 control-label">Cuerpo</label>
-        <div class="col-sm-10">
-          <textarea id="textarea" class="form-control" rows="13" name="cuerpo" required></textarea>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="imagen" class="col-sm-2 control-label">Imagen</label>
-        <div class="col-sm-10">
-          <input type="url" class="form-control" id="url" name="url" placeholder="URL de la Imagen" type="url">
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="col-sm-10 col-sm-offset-2">
-            <div class="checkbox">
-                <label><input type="checkbox" id="notification" name="notification" value="send">Emitir Notificación</label>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#links-navbar-collapse" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">UTN Móvil</a>
+            </div>
+            <div class="collapse navbar-collapse" id="links-navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="noticias.html" style="text-align:center">Noticias<span class="sr-only">(current)</span></a></li>
+                    <li><a href="eventos.html" style="text-align:center">Eventos</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/logout" style="text-align:center">Salir</a></li>
+                </ul>
             </div>
         </div>
-      </div>
-      <div class="form-group">
-        <div class="col-sm-10 col-sm-offset-2">
-          <input id="submit" name="submit" type="submit" value="Enviar" class="btn btn-primary">
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="col-sm-10 col-sm-offset-2">
-          <!-- Will be used to display an alert to the user-->
-        </div>
-      </div>
-    </form>
-  </div>
-  <script type="text/javascript">
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (xhttp.readyState == 4 && xhttp.status == 200) {
-      var canal = document.getElementById('canal');
-      var data = JSON.parse(xhttp.response);
-      var size = data.length;
-      for(var i = 0; i < size; i++){
-        canal.options[i] = new Option(data[i].nombre, data[i]._id)
-      }
-    }
-  };
-  xhttp.open("GET", "/getChannels", true);
-  xhttp.send();
-  </script>
-<script type="text/javascript">
-  $('#textarea').wysihtml5({locale: "es-AR"});
-</script>
-<script>
-jQuery(document).ready(function() {
-    $('.wysihtml5-sandbox').css({"overflow": "auto"});
-});
-</script>
+    </nav>
+    <div class="container-fluid">
+        <form action="/addNew" method="post" class="form-horizontal" role="form" style="width: 100%;">
+            <div class="form-group">
+                <label for="canal" class="col-sm-2 control-label">Canal</label>
+                <div class="col-sm-10">
+                    <select name="canal" class="form-control" id="canal"></select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="titulo" class="col-sm-2 control-label">Título</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Título de la Noticia" value="" maxlength="80" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="cuerpo" class="col-sm-2 control-label">Cuerpo</label>
+                <div class="col-sm-10">
+                    <textarea id="textarea" class="form-control" rows="12" name="cuerpo" required></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="imagen" class="col-sm-2 control-label">Imagen</label>
+                <div class="col-sm-10">
+                    <input type="url" class="form-control" id="url" name="url" placeholder="URL de la Imagen" type="url">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-10 col-sm-offset-2">
+                    <div class="checkbox">
+                        <label><input type="checkbox" id="notification" name="notification" value="send">Emitir Notificación</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-10 col-sm-offset-2">
+                    <input id="submit" name="submit" type="submit" value="Enviar" class="btn btn-primary">
+                    <input onclick="location.href='/historialNoticias.html';" type="button" value="Ver historial" class="btn btn-warning">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-10 col-sm-offset-2">
+                    <!-- Will be used to display an alert to the user-->
+                </div>
+            </div>
+        </form>
+    </div>
+    <script type="text/javascript">
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+            var canal = document.getElementById('canal');
+            var data = JSON.parse(xhttp.response);
+            var size = data.length;
+            for(var i = 0; i < size; i++){
+                canal.options[i] = new Option(data[i].nombre, data[i]._id)
+            }
+        }
+    };
+    xhttp.open("GET", "/getChannels", true);
+    xhttp.send();
+    </script>
+    <script type="text/javascript">
+    $('#textarea').wysihtml5({locale: "es-AR"});
+    </script>
+    <script>
+    jQuery(document).ready(function() {
+        $('.wysihtml5-sandbox').css({"overflow": "auto"});
+    });
+    </script>
 </body>
 </html>

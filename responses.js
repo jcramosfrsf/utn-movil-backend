@@ -1,5 +1,6 @@
 var assert = require("assert");
 var notification = require("./notification");
+var ObjectId = require('mongodb').ObjectID;
 require("date-utils");
 
 module.exports.getNews = function(db, request, response){
@@ -24,6 +25,19 @@ module.exports.getNews = function(db, request, response){
             });
         }
     }
+}
+
+module.exports.getAllNews = function(db, request, response){
+    var result = [];
+    var cursor = db.collection("noticias").find().sort({fecha: -1}).limit(25);
+    cursor.each(function(err, doc) {
+        assert.equal(err, null);
+        if (doc != null) {
+            result.push(doc);
+        } else {
+            response.status(200).send(result);
+        }
+    });
 }
 
 module.exports.getChannels = function(db, response){
@@ -64,6 +78,19 @@ module.exports.getEvents = function(db, request, response){
     }
 }
 
+module.exports.getAllEvents = function(db, request, response){
+    var result = [];
+    var cursor = db.collection("eventos").find().sort({fecha: -1}).limit(25);
+    cursor.each(function(err, doc) {
+        assert.equal(err, null);
+        if (doc != null) {
+            result.push(doc);
+        }else{
+            response.status(200).json(result);
+        }
+    });
+}
+
 module.exports.addNew = function(db, request, response){
     if(request.body != null){
         var params = request.body;
@@ -76,7 +103,7 @@ module.exports.addNew = function(db, request, response){
                     db.collection("noticias").insertOne(noticia, function(err, result) {
                         assert.equal(err, null);
                         if(err == null){
-                            response.status(200).redirect("/exito.html");
+                            response.status(200).redirect("/exitoNoticias.html");
                             if(params.notification == "send"){
                                 notification.send("noticias", noticia.canal, canal.nombre, noticia.titulo);
                             }
@@ -90,6 +117,20 @@ module.exports.addNew = function(db, request, response){
     }
 }
 
+module.exports.removeNew = function(db, request, response){
+    var id = request.query.id;
+    if(id != null){
+        db.collection("noticias").remove({"_id": ObjectId(id)}, function(err, result) {
+            assert.equal(err, null);
+            if(err == null){
+                response.status(200).redirect("/exitoNoticias.html");
+            }else{
+                console.log(err);
+            }
+        });
+    }
+}
+
 module.exports.addEvent = function(db, request, response){
     if(request.body != null){
         var params = request.body;
@@ -99,7 +140,7 @@ module.exports.addEvent = function(db, request, response){
             db.collection("eventos").insertOne(evento, function(err, result) {
                 assert.equal(err, null);
                 if(err == null){
-                    response.status(200).redirect("/exito.html");
+                    response.status(200).redirect("/exitoEventos.html");
                     if(params.notification == "send"){
                         notification.send("eventos", evento.canal, evento.titulo, evento.lugar);
                     }
@@ -108,5 +149,19 @@ module.exports.addEvent = function(db, request, response){
                 }
             });
         }
+    }
+}
+
+module.exports.removeEvent = function(db, request, response){
+    var id = request.query.id;
+    if(id != null){
+        db.collection("eventos").remove({"_id": ObjectId(id)}, function(err, result) {
+            assert.equal(err, null);
+            if(err == null){
+                response.status(200).redirect("/exitoEventos.html");
+            }else{
+                console.log(err);
+            }
+        });
     }
 }

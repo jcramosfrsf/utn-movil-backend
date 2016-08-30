@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <script src="jquery-3.0.0.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+    <link rel="stylesheet" href="bootstrap3-wysihtml5.min.css">
+    <title>UTN Móvil - Historial Noticias</title>
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#links-navbar-collapse" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">UTN Móvil</a>
+            </div>
+            <div class="collapse navbar-collapse" id="links-navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="noticias.html" style="text-align:center">Noticias<span class="sr-only">(current)</span></a></li>
+                    <li><a href="eventos.html" style="text-align:center">Eventos</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/logout" style="text-align:center">Salir</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <div class="col-sm-10 col-sm-offset-1">
+            <div class="table-responsive">
+              <table class="table-condensed">
+                  <thead>
+                    <tr>
+                      <th>Fecha</th>
+                      <th>Canal</th>
+                      <th>Título</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="tableHistory">
+                  </tbody>
+              </table>
+          </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+            var table = document.getElementById('tableHistory');
+            var data = JSON.parse(xhttp.response);
+            var size = data.length;
+            for(var i = 0; i < size; i++){
+                var obj = data[i];
+                var row = table.insertRow();
+                var fecha = row.insertCell(0);
+                var canal = row.insertCell(1);
+                var titulo = row.insertCell(2);
+                var borrar = row.insertCell(3);
+                fecha.innerHTML = new Date(obj.fecha).toLocaleString();
+                canal.innerHTML = obj.autor;
+                titulo.innerHTML = obj.titulo;
+
+                var form = document.createElement("form");
+                form.setAttribute("action", "removeNew");
+
+                var hidden = document.createElement("input");
+                hidden.setAttribute('type', "hidden");
+                hidden.setAttribute('name', "id");
+                hidden.setAttribute('value', obj._id);
+
+                var submit = document.createElement("input");
+                submit.setAttribute('class', "btn btn-danger btn-sm");
+                submit.setAttribute('type', "submit");
+                submit.setAttribute('value', "Borrar");
+                form.appendChild(hidden);
+                form.appendChild(submit);
+                borrar.appendChild(form);
+            }
+        }
+    };
+    xhttp.open("GET", "/getAllNews", true);
+    xhttp.send();
+    </script>
+</body>
+</html>

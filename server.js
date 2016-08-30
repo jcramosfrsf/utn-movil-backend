@@ -76,10 +76,13 @@ function initWebServer(){
 
 	//Protected Routes
 	web.use('/addNew', verifyToken);
+	web.use('/removeNew', verifyToken);
 	web.use('/addEvent', verifyToken);
+	web.use('/removeEvent', verifyToken);
 	web.use('/noticias.html', verifyToken);
+	web.use('/exitoNoticias.html', verifyToken);
 	web.use('/eventos.html', verifyToken);
-	web.use('/exito.html', verifyToken);
+	web.use('/exitoEventos.html', verifyToken);
 
 	web.post('/authenticate', function(req, res){
 		var user = req.body.inputUser;
@@ -114,8 +117,24 @@ function initWebServer(){
 		query.addNew(db, req, res);
 	});
 
+	web.get('/getAllNews', function(req, res){
+		query.getAllNews(db, req, res);
+	});
+
+	web.get('/removeNew', function(req, res){
+		query.removeNew(db, req, res);
+	});
+
 	web.post('/addEvent', function(req, res){
 		query.addEvent(db, req, res);
+	});
+
+	web.get('/getAllEvents', function(req, res){
+		query.getAllEvents(db, req, res);
+	});
+
+	web.get('/removeEvent', function(req, res){
+		query.removeEvent(db, req, res);
 	});
 
 	web.get('/getChannels', function(req, res){
