@@ -67,12 +67,14 @@ function initWebServer(){
 	web.use(cookieParser());
 
 	//Force HTTPS
+	/*
 	web.use(function(req, res, next) {
 	  if(!req.secure) {
 	    return res.redirect(['https://', req.get('Host'), req.url].join(''));
 	  }
 	  next();
 	});
+	*/
 
 	//Protected Routes
 	web.use('/addNew', verifyToken);
@@ -140,11 +142,18 @@ function initWebServer(){
 	web.get('/getChannels', function(req, res){
 		query.getChannels(db, res);
 	});
-
+	/*
 	var httpsServer = https.createServer(credentials, web);
 
 	httpsServer.listen(HTTPS_PORT, function(){
 		console.log('HTTPS Web Server running on port '+ HTTPS_PORT);
+	});*/
+
+	//HTTP for testing
+	var httpServer = http.createServer(web);
+
+	httpServer.listen(HTTPS_PORT, function(){
+		console.log('HTTP Web Server running on port '+ HTTPS_PORT);
 	});
 }
 

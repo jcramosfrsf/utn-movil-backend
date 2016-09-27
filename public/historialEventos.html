@@ -50,9 +50,23 @@
               </table>
             </div>
         </div>
+        <div class="col-sm-4 col-sm-offset-1">
+            <nav aria-label="...">
+              <ul class="pager">
+                <li id="previousButton"><a>Anterior</a></li>
+                <li id="nextButton"><a>Siguiente</a></li>
+              </ul>
+            </nav>
+        </div>
     </div>
+
     <script type="text/javascript">
+    var RESULTS_BY_PAGE = 25;
     var xhttp = new XMLHttpRequest();
+    var offset = parseInt(location.search.split('offset=')[1]);
+    if(!offset || offset < 0){
+        offset = 0;
+    }
     xhttp.onreadystatechange = function() {
         if (xhttp.readyState == 4 && xhttp.status == 200) {
             var table = document.getElementById('tableHistory');
@@ -85,9 +99,26 @@
                 form.appendChild(submit);
                 borrar.appendChild(form);
             }
+            var previousButton = document.getElementById("previousButton");
+            var nextButton = document.getElementById("nextButton");
+            var allURL = "/historialEventos.html?offset=";
+            var previousOffset = offset - RESULTS_BY_PAGE;
+            var nextOffset = offset + RESULTS_BY_PAGE;
+
+            if(previousOffset < 0){
+                previousButton.setAttribute("class", "disabled");
+            }else{
+                previousButton.getElementsByTagName("a")[0].setAttribute('href', allURL+previousOffset);
+            }
+
+            if(size < RESULTS_BY_PAGE){
+                nextButton.setAttribute("class", "disabled");
+            }else{
+                nextButton.getElementsByTagName("a")[0].setAttribute('href', allURL+nextOffset);
+            }
         }
     };
-    xhttp.open("GET", "/getAllEvents", true);
+    xhttp.open("GET", "/getAllEvents?offset=" + offset, true);
     xhttp.send();
     </script>
 </body>

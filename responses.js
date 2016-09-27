@@ -29,7 +29,14 @@ module.exports.getNews = function(db, request, response){
 
 module.exports.getAllNews = function(db, request, response){
     var result = [];
-    var cursor = db.collection("noticias").find().sort({fecha: -1}).limit(25);
+    var offset = 0;
+    if(request.query != null && request.query.offset != null){
+        offset = parseInt(request.query.offset);
+        if(offset < 0){
+            offset = 0;
+        }
+    }
+    var cursor = db.collection("noticias").find().sort({fecha: -1}).skip(offset).limit(25);
     cursor.each(function(err, doc) {
         assert.equal(err, null);
         if (doc != null) {
@@ -80,7 +87,14 @@ module.exports.getEvents = function(db, request, response){
 
 module.exports.getAllEvents = function(db, request, response){
     var result = [];
-    var cursor = db.collection("eventos").find().sort({fecha: -1}).limit(25);
+    var offset = 0;
+    if(request.query != null && request.query.offset != null){
+        offset = parseInt(request.query.offset);
+        if(offset < 0){
+            offset = 0;
+        }
+    }
+    var cursor = db.collection("eventos").find().sort({fecha: -1}).skip(offset).limit(25);
     cursor.each(function(err, doc) {
         assert.equal(err, null);
         if (doc != null) {
